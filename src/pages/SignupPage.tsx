@@ -42,6 +42,8 @@ export default function SignupPage() {
             data-testid="email-input"
             placeholder="이메일"
             onChange={handleEmailChange}
+            autoComplete="email"
+            name="email"
             value={email}
             required
           />
@@ -51,6 +53,8 @@ export default function SignupPage() {
             data-testid="password-input"
             placeholder="비밀번호"
             onChange={handlePasswordChange}
+            autoComplete="new-password"
+            name="password"
             value={password}
             required
           />
