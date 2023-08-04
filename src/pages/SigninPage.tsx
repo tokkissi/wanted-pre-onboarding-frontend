@@ -67,6 +67,8 @@ export default function SigninPage() {
               isValidEmail && isValidPassword ? "" : "opacity-50"
             }`}
             data-testid="signup-button"
+            type="submit"
+            disabled={!isValidEmail || !isValidPassword}
           >
             로그인
           </button>
