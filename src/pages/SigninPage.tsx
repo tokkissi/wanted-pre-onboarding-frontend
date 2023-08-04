@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { validateEmail, validatePassword } from "../utils/authUtils";
+import { sendSigninFormData } from "../services/authApi";
+import { useNavigate } from "react-router-dom";
 
 export default function SigninPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isValidEmail, setIsValidEmail] = useState(false);
   const [isValidPassword, setIsValidPassword] = useState(false);
+  const navigate = useNavigate();
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newEmail = e.target.value;
@@ -25,13 +28,21 @@ export default function SigninPage() {
       return;
     }
     const formData = { email: email, password: password };
+    sendSigninFormData(formData)
+      .then((res) => {
+        if (res) {
+          const accessToken = res.access_token;
+          localStorage.setItem("accessToken", accessToken);
+          // context api를 이용해서 global state로 관리하는 코드 삽입 예정
+        }
+      })
+      .then(() => navigate("/todo"));
   };
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-300">
       <div className="bg-white px-8 py-6 rounded-sm min-w-[18rem]">
         <h1 className="mb-8 text-center text-xl font-bold">로그인</h1>
-
         <form className="flex flex-col" onSubmit={handleSubmit}>
           <input
             className="border border-gray-300 px-2 py-1 mb-2 rounded-sm text-sm focus:outline-sky-300"

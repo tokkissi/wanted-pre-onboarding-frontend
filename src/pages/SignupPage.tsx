@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { validateEmail, validatePassword } from "../utils/authUtils";
+import { sendSignupFormData } from "../services/authApi";
+import { useNavigate } from "react-router-dom";
 
 export default function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isValidEmail, setIsValidEmail] = useState(false);
   const [isValidPassword, setIsValidPassword] = useState(false);
+  const navigate = useNavigate();
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newEmail = e.target.value;
@@ -25,13 +28,13 @@ export default function SignupPage() {
       return;
     }
     const formData = { email: email, password: password };
+    sendSignupFormData(formData).then((res) => navigate("/signin"));
   };
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-300">
       <div className="bg-white px-8 py-6 rounded-sm min-w-[18rem]">
         <h1 className="mb-8 text-center text-xl font-bold">회원가입</h1>
-
         <form className="flex flex-col" onSubmit={handleSubmit}>
           <input
             className="border border-gray-300 px-2 py-1 mb-2 rounded-sm text-sm focus:outline-sky-300"
@@ -54,7 +57,6 @@ export default function SignupPage() {
           <p className="text-xs text-end mb-4 text-gray-400">
             *비밀번호는 8글자 이상으로 입력해주세요
           </p>
-
           <button
             className={`px-2 py-1 border bg-sky-600 text-white rounded-sm hover:opacity-50 hover:cursor-pointer ${
               isValidEmail && isValidPassword ? "" : "opacity-50"
