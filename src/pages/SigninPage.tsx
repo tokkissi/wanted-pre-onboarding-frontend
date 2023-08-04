@@ -28,15 +28,14 @@ export default function SigninPage() {
       return;
     }
     const formData = { email: email, password: password };
-    sendSigninFormData(formData)
-      .then((res) => {
-        if (res) {
-          const accessToken = res.access_token;
-          localStorage.setItem("accessToken", accessToken);
-          // context api를 이용해서 global state로 관리하는 코드 삽입 예정
-        }
-      })
-      .then(() => navigate("/todo"));
+    sendSigninFormData(formData).then((res) => {
+      if (res) {
+        const accessToken = res.access_token;
+        localStorage.setItem("accessToken", accessToken);
+        // context api를 이용해서 global state로 관리하는 코드 삽입 예정
+        navigate("/todo");
+      }
+    });
   };
 
   return (
