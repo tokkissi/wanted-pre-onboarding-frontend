@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { validateEmail, validatePassword } from "../utils/authUtils";
 import { sendSigninFormData } from "../services/authApi";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../contexts/AuthContext";
 
 export default function SigninPage() {
   const [email, setEmail] = useState("");
@@ -9,6 +10,7 @@ export default function SigninPage() {
   const [isValidEmail, setIsValidEmail] = useState(false);
   const [isValidPassword, setIsValidPassword] = useState(false);
   const navigate = useNavigate();
+  const { setAccessToken } = useContext(AuthContext);
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newEmail = e.target.value;
@@ -32,7 +34,7 @@ export default function SigninPage() {
       if (res) {
         const accessToken = res.access_token;
         localStorage.setItem("accessToken", accessToken);
-        // context api를 이용해서 global state로 관리하는 코드 삽입 예정
+        setAccessToken(accessToken);
         navigate("/todo");
       }
     });
