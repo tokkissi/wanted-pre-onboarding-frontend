@@ -39,7 +39,7 @@ export default function SigninPage() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-300">
+    <div className="flex flex-col items-center justify-center h-full bg-gray-300">
       <div className="bg-white px-8 py-6 rounded-sm min-w-[18rem]">
         <h1 className="mb-8 text-center text-xl font-bold">로그인</h1>
         <form className="flex flex-col" onSubmit={handleSubmit}>
