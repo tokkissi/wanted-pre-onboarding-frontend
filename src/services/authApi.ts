@@ -1,13 +1,5 @@
 import { apiClient } from "../api/apiClient";
-
-interface FormData {
-  email: string;
-  password: string;
-}
-
-export interface SigninResponseBody {
-  access_token: string;
-}
+import { FormData, SigninResponseBody } from "../model/auth";
 
 /** 회원가입 api 요청 함수 */
 export const sendSignupFormData = async (formData: FormData): Promise<void> => {

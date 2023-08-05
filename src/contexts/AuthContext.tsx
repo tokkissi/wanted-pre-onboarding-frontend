@@ -1,13 +1,5 @@
 import React, { useState } from "react";
-
-interface AuthContextType {
-  accessToken: string | null;
-  setAccessToken: (newAccessToken: string | null) => void;
-}
-
-interface AuthProviderProps {
-  children: React.ReactNode;
-}
+import { AuthContextType, AuthProviderProps } from "../model/auth";
 
 export const AuthContext = React.createContext<AuthContextType>({
   accessToken: null,
