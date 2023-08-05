@@ -1,13 +1,13 @@
 import { NavLink } from "react-router-dom";
 
-interface navLinkProps {
+interface NavLinkProps {
   isActive: boolean;
 }
 
 export default function NavBar() {
   const defaultStyle = "text-gray-600";
   const activeStyle = " font-bold text-sky-500 border-b-2 p-2 border-sky-500";
-  const flexibleActiveLinkStyle = ({ isActive }: navLinkProps) =>
+  const flexibleActiveLinkStyle = ({ isActive }: NavLinkProps) =>
     isActive ? defaultStyle + activeStyle : defaultStyle;
 
   return (
