@@ -6,6 +6,7 @@ import Layout from "./components/Layout";
 import HomePage from "./pages/HomePage";
 import TodoPage from "./pages/TodoPage";
 import { AuthProvider, AuthContext } from "./contexts/AuthContext";
+import { TodoProvider } from "./contexts/TodoContext";
 
 function App() {
   return (
@@ -45,7 +46,9 @@ function Routing() {
         {
           path: "todo",
           element: accessToken ? (
-            <TodoPage />
+            <TodoProvider>
+              <TodoPage />
+            </TodoProvider>
           ) : (
             <Navigate replace to="/signin" />
           ),
