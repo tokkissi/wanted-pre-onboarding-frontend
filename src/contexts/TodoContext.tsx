@@ -33,31 +33,54 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
 
   /** init 할때에는, 데이터 요청 실패 시 빈 배열이라도 받아 랜더링하게 함 */
   const handleInitTodo = useCallback(async () => {
-    const todolist = await getTodoList();
-    dispatch({ type: "INIT", payload: todolist });
+    try {
+      const todolist = await getTodoList();
+      dispatch({ type: "INIT", payload: todolist });
+    } catch (error) {
+      console.error(`getTodoList에서 오류가 발생했습니다: ${error}`);
+    }
   }, []);
 
   const handleAddTodo = async (todoValue: string) => {
-    const newTodo = await addTodo(todoValue);
-    if (newTodo !== null) {
-      dispatch({ type: "ADD", payload: newTodo });
+    try {
+      const newTodo = await addTodo(todoValue);
+      if (newTodo) {
+        dispatch({ type: "ADD", payload: newTodo });
+      }
+    } catch (error) {
+      console.error(`addTodo에서 오류가 발생했습니다: ${error}`);
     }
   };
+
   const handleEditTodo = async (todo: Todo) => {
-    const updatedTodo = await editTodo(todo);
-    if (updatedTodo !== null) {
-      dispatch({ type: "EDIT", payload: updatedTodo });
+    try {
+      const updatedTodo = await editTodo(todo);
+      if (updatedTodo) {
+        dispatch({ type: "EDIT", payload: updatedTodo });
+      }
+    } catch (error) {
+      console.error(`editTodo에서 오류가 발생했습니다: ${error}`);
     }
   };
+
   const handleRemoveTodo = async (id: number) => {
-    await removeTodo(id);
-    dispatch({ type: "REMOVE", payload: id });
+    try {
+      await removeTodo(id);
+      dispatch({ type: "REMOVE", payload: id });
+    } catch (error) {
+      console.error(`removeTodo에서 오류가 발생했습니다: ${error}`);
+    }
   };
+
   const handleToggleTodo = async (todo: Todo) => {
-    handleEditTodo({
-      ...todo,
-      isCompleted: !todo.isCompleted,
-    });
+    try {
+      handleEditTodo({
+        ...todo,
+        isCompleted: !todo.isCompleted,
+      });
+    } catch (error) {
+      console.error(`handleToggleTodo에서 오류가 발생했습니다: ${error}`);
+    }
   };
 
   return (
