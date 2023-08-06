@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { validateEmail, validatePassword } from "../utils/authUtils";
 import { sendSigninFormData } from "../services/authApi";
 import { useNavigate } from "react-router-dom";
@@ -9,8 +9,22 @@ export default function SigninPage() {
   const [password, setPassword] = useState("");
   const [isValidEmail, setIsValidEmail] = useState(false);
   const [isValidPassword, setIsValidPassword] = useState(false);
+  const [isServerError, setIsServerError] = useState(false);
+
   const navigate = useNavigate();
   const { setAccessToken } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (isServerError) {
+      const timer = setTimeout(() => {
+        setIsServerError(false);
+      }, 2000);
+
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }, [isServerError]);
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newEmail = e.target.value;
@@ -30,14 +44,20 @@ export default function SigninPage() {
       return;
     }
     const formData = { email: email, password: password };
-    sendSigninFormData(formData).then((res) => {
-      if (res) {
-        const accessToken = res.access_token;
-        localStorage.setItem("accessToken", accessToken);
-        setAccessToken(accessToken);
-        navigate("/todo");
-      }
-    });
+    sendSigninFormData(formData)
+      .then((res) => {
+        if (res) {
+          const accessToken = res.access_token;
+          localStorage.setItem("accessToken", accessToken);
+          setIsServerError(false);
+          setAccessToken(accessToken);
+          navigate("/todo");
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        setIsServerError(true);
+      });
   };
 
   return (
@@ -67,6 +87,11 @@ export default function SigninPage() {
             value={password}
             required
           />
+          {isServerError && (
+            <p className="text-xs mb-2 text-red-500 font-bold">
+              로그인에 실패했습니다
+            </p>
+          )}
           <button
             className={`px-2 py-1 border bg-sky-600 text-white rounded-sm hover:opacity-50 hover:cursor-pointer ${
               isValidEmail && isValidPassword ? "" : "opacity-50"
