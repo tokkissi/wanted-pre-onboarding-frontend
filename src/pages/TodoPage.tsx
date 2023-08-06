@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { TodoList } from "../model/todo";
 import useTodo from "../hooks/useTodo";
 
 export default function TodoPage() {
@@ -152,6 +151,7 @@ export default function TodoPage() {
                     </span>
                     <input
                       type="text"
+                      data-testid="modify-input"
                       ref={(inputEl) => {
                         if (inputEl) {
                           inputRef.current[todo.id] = inputEl;
