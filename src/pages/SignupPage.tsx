@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { validateEmail, validatePassword } from "../utils/authUtils";
 import { sendSignupFormData } from "../services/authApi";
 import { useNavigate } from "react-router-dom";
@@ -8,18 +8,45 @@ export default function SignupPage() {
   const [password, setPassword] = useState("");
   const [isValidEmail, setIsValidEmail] = useState(false);
   const [isValidPassword, setIsValidPassword] = useState(false);
+  const [validationErrorMessage, setValidationErrorMessage] = useState("");
+  const [isServerError, setIsServerError] = useState(false);
+
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isServerError) {
+      const timer = setTimeout(() => {
+        setIsServerError(false);
+      }, 2000);
+
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }, [isServerError]);
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newEmail = e.target.value;
     setEmail(newEmail);
-    setIsValidEmail(validateEmail(newEmail));
+    if (!validateEmail(newEmail)) {
+      setValidationErrorMessage("이메일에 @를 포함해주세요");
+      setIsValidEmail(false);
+    } else {
+      setIsValidEmail(true);
+      setValidationErrorMessage("");
+    }
   };
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newPassword = e.target.value;
     setPassword(newPassword);
-    setIsValidPassword(validatePassword(newPassword));
+    if (!validatePassword(newPassword)) {
+      setValidationErrorMessage("비밀번호는 8글자 이상으로 입력해주세요");
+      setIsValidPassword(false);
+    } else {
+      setIsValidPassword(true);
+      setValidationErrorMessage("");
+    }
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -28,7 +55,15 @@ export default function SignupPage() {
       return;
     }
     const formData = { email: email, password: password };
-    sendSignupFormData(formData).then((res) => navigate("/signin"));
+    sendSignupFormData(formData)
+      .then((res) => {
+        setIsServerError(false);
+        navigate("/signin");
+      })
+      .catch((err) => {
+        console.error(err);
+        setIsServerError(true);
+      });
   };
 
   return (
@@ -61,6 +96,16 @@ export default function SignupPage() {
           <p className="text-xs text-end mb-4 text-gray-400">
             *비밀번호는 8글자 이상으로 입력해주세요
           </p>
+          {validationErrorMessage && (
+            <p className="text-xs mb-2 text-red-500 font-bold">
+              {validationErrorMessage}
+            </p>
+          )}
+          {isServerError && (
+            <p className="text-xs mb-2 text-red-500 font-bold">
+              회원가입 중 서버 에러가 발생했습니다
+            </p>
+          )}
           <button
             className={`px-2 py-1 border bg-sky-600 text-white rounded-sm hover:opacity-50 hover:cursor-pointer ${
               isValidEmail && isValidPassword ? "" : "opacity-50"
