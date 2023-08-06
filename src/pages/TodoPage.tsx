@@ -46,8 +46,6 @@ export default function TodoPage() {
   };
 
   const handleOnBlurListInput = (id: number) => {
-    // setTempTodoValue({ ...tempTodoValue, [id]: "" });
-    // setActiveModifyButtonId(null);
     setActiveModifyButtonId(null);
   };
 
@@ -169,12 +167,7 @@ export default function TodoPage() {
                       onChange={(e) =>
                         handleOnChangeListInput(todo.id, e.target.value)
                       }
-                      value={
-                        // activeModifyButtonId && activeModifyButtonId === todo.id
-                        //   ? tempTodoValue[todo.id]
-                        //   : ""
-                        tempTodoValue[todo.id] ?? todo.todo
-                      }
+                      value={tempTodoValue[todo.id] ?? todo.todo}
                       onClick={() => setActiveModifyButtonId(todo.id)}
                       onBlur={() => {
                         handleOnBlurListInput(todo.id);
