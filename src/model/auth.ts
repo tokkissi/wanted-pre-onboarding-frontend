@@ -1,6 +1,7 @@
 export interface AuthContextType {
   accessToken: string | null;
   setAccessToken: (newAccessToken: string | null) => void;
+  logout: () => void;
 }
 
 export interface AuthProviderProps {

@@ -4,6 +4,7 @@ import { AuthContextType, AuthProviderProps } from "../model/auth";
 export const AuthContext = React.createContext<AuthContextType>({
   accessToken: null,
   setAccessToken: () => {},
+  logout: () => {},
 });
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
@@ -11,8 +12,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     localStorage.getItem("accessToken")
   );
 
+  const logout = () => {
+    setAccessToken(null);
+    localStorage.removeItem("accessToken");
+  };
+
   return (
-    <AuthContext.Provider value={{ accessToken, setAccessToken }}>
+    <AuthContext.Provider value={{ accessToken, setAccessToken, logout }}>
       {children}
     </AuthContext.Provider>
   );
