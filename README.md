@@ -8,17 +8,12 @@ https://wanted-pre-onboarding-frontend-tokkissi.vercel.app
 
 ## 2. 프로젝트 실행방법
 
-1. 프로젝트의 root 경로에 .env.local 파일을 생성하고 해당 파일에 아래의 코드를 복사해서 붙여넣어준 후 저장한다
-```shell
-REACT_APP_API_BASE_URL=https://www.pre-onboarding-selection-task.shop
-```
-
-2. 프로젝트의 패키지를 설치한다
+1. 프로젝트의 패키지를 설치한다
 ```shell
 npm install
 ```
 
-3. 프로젝트를 실행한다
+2. 프로젝트를 실행한다
 ```shell
 npm start
 ```
